@@ -83,7 +83,7 @@ El productor lee un archivo CSV con datos de sensores y los envía al tópico de
 - Ingesta automáticamente de todas las carpetas, cálculo de estadísticos para cada régimen de fallo.
 - Envío por mensaje a través de flask: 'sensor_data_1'
      ```bash
-   python producer_1_v1.py
+   python producer_1_v2.py
    ```
 
 #### Consumidor:
@@ -97,7 +97,13 @@ El consumidor recibe los datos del tópico de Kafka, realiza predicciones y alma
    Predicción: [1]
    Guardado en InfluxDB: {"sensor_1": 0.23, "sensor_2": 0.45} | Predicción: 1
    ```
-- Tambi
+2. Así mismo, generamos un consumer_2.py modificado para las columnas generadas en python producer_1_v2.py
+  Por pantalla se muestra:
+  ```
+  Etiqueta del producer: ['bearing_fault_detection_normal']
+   Predicción: ['normal']
+   ```
+  
 ### 3. Entrenamiento de Modelos
 
 #### Clasificación de Fallos en Rodamientos:
