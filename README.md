@@ -30,8 +30,9 @@ Los datos provienen de sensores industriales y un conjunto de imágenes etiqueta
 - **`Model_tester_segmentation.ipynb`**: Evaluación de los modelos de segmentación.
 - **`Model_trainer_with_classification.ipynb`**: Entrenamiento de un modelo híbrido para clasificación y segmentación simultánea.
 - **`Model_tester_hibrid.ipynb`**: Evaluación del modelo híbrido.
-- **`producer_1_v1.py`**: Productor Kafka que envía datos de sensores simulados a un tópico.
-- **`consumer_1.py`**: Consumidor Kafka que recibe datos, realiza predicciones y las guarda en InfluxDB.
+- **`producer_1_v1.py y producer_1_v2.py`**: Productor Kafka que envía datos de sensores simulados a un tópico.
+- **`consumer_1.py y consumer_2.py`**: Consumidor Kafka que recibe datos, realiza predicciones y las muestra por pantalla.
+- 
 
 ## Requisitos
 
