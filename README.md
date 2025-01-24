@@ -99,6 +99,9 @@ El consumidor recibe los datos del tópico de Kafka, realiza predicciones y alma
    Guardado en InfluxDB: {"sensor_1": 0.23, "sensor_2": 0.45} | Predicción: 1
    ```
 2. Así mismo, generamos un consumer_2.py modificado para las columnas generadas en python producer_1_v2.py
+   ```bash
+   python consumer_2.py
+   ```
   Por pantalla se muestra:
   ```
   Etiqueta del producer: ['bearing_fault_detection_normal']
