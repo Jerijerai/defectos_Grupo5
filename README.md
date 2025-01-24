@@ -79,6 +79,12 @@ El productor lee un archivo CSV con datos de sensores y los envía al tópico de
    python producer_1_v1.py
    ```
    El productor enviará un mensaje cada 3 segundos al tópico configurado.
+3. Ejecución con la base de datos original, por tanto, es método para prescindir de cualquier preprocesado:
+- Ingesta automáticamente de todas las carpetas, cálculo de estadísticos para cada régimen de fallo.
+- Envío por mensaje a través de flask: 'sensor_data_1'
+     ```bash
+   python producer_1_v1.py
+   ```
 
 #### Consumidor:
 El consumidor recibe los datos del tópico de Kafka, realiza predicciones y almacena los resultados en InfluxDB.
@@ -91,7 +97,7 @@ El consumidor recibe los datos del tópico de Kafka, realiza predicciones y alma
    Predicción: [1]
    Guardado en InfluxDB: {"sensor_1": 0.23, "sensor_2": 0.45} | Predicción: 1
    ```
-
+- Tambi
 ### 3. Entrenamiento de Modelos
 
 #### Clasificación de Fallos en Rodamientos:
