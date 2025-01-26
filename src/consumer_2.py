@@ -29,12 +29,10 @@ def fix_json_format(broken_json):
     Intenta corregir un JSON malformado reemplazando comillas simples por dobles
     y limpiando ciertos caracteres que pueden causar errores.
     """
-    # Reemplazar comillas simples por dobles
     replaced = broken_json.replace("'", '"')
     replaced = replaced.strip()
-    # Eliminar posibles comas sobrantes antes de llaves/corchetes de cierre
     replaced = re.sub(r",\s*}", "}", replaced)
-    replaced = re.sub(r",\s*\]", "]", replaced)
+    replaced = re.sub(r",\s*]", "]", replaced)
     return json.loads(replaced)
 
 try:
@@ -46,49 +44,33 @@ try:
 
         if msg.error():
             if msg.error().code() == KafkaError._PARTITION_EOF:
-                # Fin de la partición
                 continue
             else:
                 print(f"Error en el consumer: {msg.error()}")
                 break
 
-        # Procesar el mensaje recibido
         try:
             raw_message = msg.value().decode('utf-8')
             try:
-                # Primer intento de parsear JSON
                 row_json = json.loads(raw_message)
             except json.JSONDecodeError:
-                # Si falla, intentamos “corregir” el formato
                 print("Error en el formato JSON. Intentando corregir...")
                 row_json = fix_json_format(raw_message)
 
-            # Verificar si el JSON es un dict (una sola fila) o una lista de dicts
-            if isinstance(row_json, dict):
-                # Crear DataFrame de una sola fila
-                row_df = pd.DataFrame([row_json])
-            elif isinstance(row_json, list):
-                # Si es lista de diccionarios, creamos DataFrame
-                # (si la lista es de escalares, esto también dará error)
-                row_df = pd.DataFrame(row_json)
-            else:
-                raise ValueError(
-                    "El mensaje JSON no es ni un diccionario ni una lista de diccionarios."
-                )
+            # Crear DataFrame desde el JSON recibido
+            row_df = pd.DataFrame([row_json])
 
-            # Eliminar la columna 'Etiqueta' si existe
-            if 'Etiqueta' in row_df.columns:
-                row_df.drop(columns=['Etiqueta'], inplace=True)
+            # Asegurar que todas las columnas esperadas estén presentes
+            for col in expected_features:
+                if col not in row_df.columns:
+                    row_df[col] = 0  # Rellenar con un valor por defecto
 
-            # Ajustar las columnas al orden esperado por el modelo
-            # (solo las que existan; si faltan columnas, también podría fallar)
-            row_df = row_df[[col for col in expected_features if col in row_df.columns]]
+            # Ajustar el DataFrame al orden esperado por el modelo
+            row_df = row_df[expected_features]
 
             # Realizar la predicción
             prediccion = modelo.predict(row_df)
             print(f"Predicción: {prediccion}")
-
-            #guardar_en_influxdb(row_df.iloc[0], prediccion)
 
         except Exception as e:
             print(f"Error procesando el mensaje: {e}")
@@ -98,4 +80,3 @@ except KeyboardInterrupt:
 
 finally:
     consumer.close()
-    client.close()
