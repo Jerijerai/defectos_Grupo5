@@ -41,7 +41,7 @@ Los datos provienen de sensores industriales y un conjunto de imágenes etiqueta
 
 ### Software
 - Python 3.8+
-- Librerías principales: `pandas`, `numpy`, `scikit-learn`, `torch`, `torchvision`, `confluent-kafka`, `influxdb-client`, etc.
+- Librerías principales: `pandas`, `numpy`, `scikit-learn`, `torch`, `torchvision`, `confluent-kafka`, etc.
 
 Instala todas las dependencias ejecutando:
 ```bash
@@ -50,7 +50,6 @@ pip install -r requirements.txt
 
 ### Configuración
 - Configura tu instancia de Kafka y crea los tópicos necesarios (`sensor_data_1`).
-- Configura tu base de datos en InfluxDB para almacenar predicciones y datos de sensores.
 
 ## Instrucciones de Uso
 
@@ -64,11 +63,6 @@ pip install -r requirements.txt
 2. **Configuración de Kafka**:
    - Inicia un servidor Kafka local o remoto.
    - Crea un tópico llamado `sensor_data_1` para el envío y recepción de datos.
-
-3. **Configuración de InfluxDB**:
-   - Asegúrate de tener InfluxDB instalado y en ejecución.
-   - Crea un bucket llamado `sensor_data`.
-   - Modifica los tokens y configuraciones en `consumer_1.py` según tus credenciales de InfluxDB.
 
 ### 2. Ingesta de Datos con Kafka
 
@@ -88,7 +82,7 @@ El productor lee un archivo CSV con datos de sensores y los envía al tópico de
    ```
 
 #### Consumidor:
-El consumidor recibe los datos del tópico de Kafka, realiza predicciones y almacena los resultados en InfluxDB.
+El consumidor recibe los datos del tópico de Kafka y realiza predicciones.
 1. Ejecuta el siguiente comando para iniciar el consumidor:
    ```bash
    python consumer_1.py
@@ -96,7 +90,7 @@ El consumidor recibe los datos del tópico de Kafka, realiza predicciones y alma
    Verás en la consola las predicciones realizadas y mensajes como:
    ```
    Predicción: [1]
-   Guardado en InfluxDB: {"sensor_1": 0.23, "sensor_2": 0.45} | Predicción: 1
+   Guardado en topic sensor_data_1: {"sensor_1": 0.23, "sensor_2": 0.45} | Predicción: 1
    ```
 2. Así mismo, generamos un consumer_2.py modificado para las columnas generadas en python producer_1_v2.py
    ```bash
